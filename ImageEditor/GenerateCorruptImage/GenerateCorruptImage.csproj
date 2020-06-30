@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Datasets\winequality.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="winequality.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
