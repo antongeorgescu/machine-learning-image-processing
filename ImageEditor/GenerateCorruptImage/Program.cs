@@ -46,16 +46,22 @@ namespace ConsoleApp1
             //=== Wine dataset array saved as image ===========================================
             var lines = File.ReadAllLines("winequality.csv").ToList<string>();
             List<int[]> lwineds = new List<int[]>();
+            List<string[]> lwineds2 = new List<string[]>();
             foreach (var line in lines)
             {
                 var iline = new int[12];
+                var sline = new string[12];
                 int i = 0;
                 foreach (var elem in line.Split(',').ToList())
-                    iline[i++] = int.Parse(elem);
+                {
+                    iline[i] = int.Parse(elem);
+                    sline[i++] = elem;
+                }
                 lwineds.Add(iline);
+                lwineds2.Add(sline);
             }
             var xwineds = lwineds.ToArray();
-
+            
             // transform original, uncorrupted wine dataset to bitmap image
             Bitmap grayScale = new Bitmap(xwineds[0].Length, xwineds.Length);
             for (Int32 x = 0; x < grayScale.Height; x++)
@@ -67,7 +73,7 @@ namespace ConsoleApp1
                 }
             grayScale.Save($"{RESULTS_PATH}\\wine_dataset_img_original.png", ImageFormat.Png);
 
-            //=== Insert random nulls in Wine dataset image ==================================
+            //=== Insert random outliers in Wine dataset image ==================================
             for (int i = 0; i < 300; i++)
                 PickRandom(xwineds);
             grayScale = new Bitmap(xwineds[0].Length, xwineds.Length);
@@ -81,6 +87,20 @@ namespace ConsoleApp1
                         grayScale.SetPixel(y, x, Color.FromArgb(gs, gs, gs));
                 }
             grayScale.Save($"{RESULTS_PATH}\\wine_dataset_img_corrupt.png", ImageFormat.Png);
+
+            //=== Insert random NaN values in Wine dataset saved csv file ==================================
+            var swineds = new List<string[]>();
+            var xwineds2 = lwineds2.ToArray();
+            int k = 0;
+            for (Int32 x = 0; x < xwineds2.Length; x++)
+            {
+                swineds.Add(xwineds2[k++].ToList().Select(x => x.ToString()).ToArray());
+            }
+
+            for (int i = 299; i >= 0; i--)
+                PickRandom(swineds.ToArray());
+            
+            File.WriteAllLines($"{RESULTS_PATH}\\wine_dataset_mrar.csv", swineds.Select(x => string.Join(",", x)));
         }
 
         static Random Rand = null;
@@ -94,6 +114,17 @@ namespace ConsoleApp1
             var x = Rand.Next(0, values.Length);
             var y = Rand.Next(0, 11);
             values[x][y] = -1;
+        }
+
+        public static void PickRandom(string[][] values)
+        {
+            // Create the Random object if it doesn't exist.
+            if (Rand == null) Rand = new Random();
+
+            // Pick an item and return it.
+            var x = Rand.Next(0, values.Length);
+            var y = Rand.Next(0, 11);
+            values[x][y] = "NaN";
         }
     }
 }
