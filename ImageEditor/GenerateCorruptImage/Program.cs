@@ -44,7 +44,7 @@ namespace ConsoleApp1
             }
 
             //=== Wine dataset array saved as image ===========================================
-            var lines = File.ReadAllLines("winequality.csv").ToList<string>();
+            var lines = File.ReadAllLines(@"Datasets/winequality.csv").ToList<string>();
             List<int[]> lwineds = new List<int[]>();
             List<string[]> lwineds2 = new List<string[]>();
             foreach (var line in lines)
