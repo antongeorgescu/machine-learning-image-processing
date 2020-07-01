@@ -9,11 +9,11 @@ namespace ConsoleApp1
 {
     class Program
     {
+        const string RESULTS_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\ImageEditor\GenerateCorruptImage\Results";
+        const string CONVERTED_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\converted";
+
         static void Main(string[] args)
         {
-
-            const string RESULTS_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\ImageEditor\GenerateCorruptImage\Results";
-            const string CONVERTED_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\converted";
 
             //=== Example of 2-dimensional array saved as image ===========================================
             // Create 2D array of integers
@@ -45,7 +45,7 @@ namespace ConsoleApp1
             }
 
             //=== Wine dataset array saved as image ===========================================
-            var lines = File.ReadAllLines($"{CONVERTED_PATH}//wine_attribute_values.csv").ToList<string>();
+            var lines = File.ReadAllLines($"{CONVERTED_PATH}\\wine_attribute_values.csv").ToList<string>();
             List<int[]> lwineds = new List<int[]>();
             List<string[]> lwineds2 = new List<string[]>();
             foreach (var line in lines)
