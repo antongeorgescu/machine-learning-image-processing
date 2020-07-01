@@ -62,13 +62,17 @@ X = scaler.fit_transform(X)
 X = pd.DataFrame(X, columns=['%s_scaled' % fld for fld in fields])
 print(X.columns) #scaled columns
 
-Xint = X.astype(np.int64).to_numpy()
-print(Xint.shape)
+Xint = X.astype(np.int64)
+Xintx = Xint.to_numpy()
+print(Xintx.shape)
 
 # reshape to 2d
-Xint2d = np.reshape(Xint,(6497,12)).astype(np.int64)
+Xint2d = np.reshape(Xintx,(6497,12)).astype(np.int64)
+print(Xint2d,y)
 
-np.savetxt('./converted/winequality.csv',Xint2d,delimiter=",",fmt="%3d")
+np.savetxt('./converted/wine_attribute_names.csv',fields,delimiter=",",fmt="%10s")
+np.savetxt('./converted/wine_attribute_values.csv',Xint2d,delimiter=",",fmt="%3d")
+np.savetxt('./converted/wine_quality.csv',y,delimiter=",",fmt="%1d")
 
 
 
