@@ -101,7 +101,7 @@ namespace ConsoleApp1
             for (int i = 299; i >= 0; i--)
                 PickRandom(swineds.ToArray());
             
-            File.WriteAllLines($"{RESULTS_PATH}\\wine_dataset_mrar.csv", swineds.Select(x => string.Join(",", x)));
+            File.WriteAllLines($"{RESULTS_PATH}\\wine_dataset_mcar.csv", swineds.Select(x => string.Join(",", x)));
         }
 
         static Random Rand = null;

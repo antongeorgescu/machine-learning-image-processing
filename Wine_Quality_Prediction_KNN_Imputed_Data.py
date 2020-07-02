@@ -1,88 +1,37 @@
 import pandas as pd
 import numpy as np
+from sklearn.impute import SimpleImputer
 
-REDWINE_PATH = "./datasets/winequality-red.csv"
-WHITEWINE_PATH = "./datasets/winequality-white.csv"
+# IMPUTE_TYPE = "Simple Impute (mean)"
+# IMPUTE_STRATEGY = "mean"
+IMPUTE_TYPE = "Simple Impute (most frequent)"
+IMPUTE_STRATEGY = "most_frequent"
 
-# read red wine set of observations
-data_red = pd.read_csv(REDWINE_PATH,sep=',')
-data_red['color'] = 1 #redwine
-
-print(data_red.shape)
-
-# read white wine set of observations
-data_white = pd.read_csv(WHITEWINE_PATH,sep=',')
-data_white['color'] = 0 #whitewine
-
-print(data_white.shape)
-
-# merge the two sets in one
-data = data_red.merge(data_white, how='outer')
-fields = list(data.columns)
+# read attribute names from file
+dflabels = pd.read_csv("./converted/wine_attribute_names.csv",names=["label"])
+fields = dflabels["label"].to_list()
 print(fields)
 
-import matplotlib.pyplot as plt
-import seaborn as sns
+# read attribute normalized (scaled) data from file
+datamcar = pd.read_csv("./ImageEditor/GenerateCorruptImage/Results/wine_dataset_mcar.csv",sep=',',names=fields)
+datamcar = datamcar.apply(lambda x: pd.to_numeric(x, errors='coerce')).fillna(-1)
+datamcar = datamcar.astype(float)
+imp = SimpleImputer(missing_values=-1, strategy=IMPUTE_STRATEGY)
 
-# show the histograms of values per feature (eg most of whines are at about 8 proof strength)
-sns.set()
-data.hist(figsize=(10,10),color='red', bins=13)
-plt.show()
+datax = imp.fit_transform(datamcar).astype(int)
+data = pd.DataFrame(datax, columns=fields) 
+print(data)
 
-# show the historgram of wine rankings (quality between 1 and 10)
-data['quality'].hist(color='red', bins=13)
-plt.show()
-
-import pandas as pd
-import numpy as np
-
-data_red = pd.read_csv(REDWINE_PATH,sep=',')
-data_red['color'] = 1 #redwine
-
-print(data_red.shape)
-
-data_white = pd.read_csv(WHITEWINE_PATH,sep=',')
-data_white['color'] = 0 #whitewine
-
-print(data_white.shape)
-
-data = data_red.merge(data_white, how='outer')
-
-
-# based on the "quality histograms" above, we will drop the ratings with low counts (we will keep only 3 dimesnions = 5,6,7)
-data = data.drop(data[data.quality == 1].index)    # not recorded anyway
-data = data.drop(data[data.quality == 2].index)    # not recorded anyway
-data = data.drop(data[data.quality == 10].index)   # not recorded anyway
-data = data.drop(data[data.quality == 9].index)
-data = data.drop(data[data.quality == 3].index)
-data = data.drop(data[data.quality == 8].index)
-data = data.drop(data[data.quality == 4].index)
-
-
-data.quality.value_counts()
-
-
-fields = list(data.columns)
-print(fields)
-
-
-# split the data set in two: 1) color+features (observations)  2) quality (actuals)
-
-fields = list(data.columns[:-2])
-fields.append('color')  #adding color back
 X = data[fields]
-y = data['quality']
-print(fields)
+y = pd.read_csv("./converted/wine_quality.csv",sep=',',names=["quality"])
 
 # A Pearson correlation was used to identify which features correlate with wine quality. It looks as if higher the alcohol content the higher the quality. Lower density and volatile acidity also correlated with better quality as seen in the pairwise correlation chart the chart below. Only the top 5 correlated features were carried over to the KNN models.
-
 correlations = data[fields].corrwith(y)
 correlations.sort_values(inplace=True)
 
 # the following fields are the 5 retained as having the highest correlations to wine quality
 fields = correlations.map(abs).sort_values().iloc[-5:].index
 print(fields) #prints the top two abs correlations
-
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -91,16 +40,6 @@ import seaborn as sns
 # Looks like alcohol and density are the most correlated with quality
 ax = correlations.plot(kind='bar')
 ax.set(ylim=[-1, 1], ylabel='pearson correlation')
-
-
-from sklearn.preprocessing import MinMaxScaler
-
-X = data[fields]
-
-scaler = MinMaxScaler()
-X = scaler.fit_transform(X)
-X = pd.DataFrame(X, columns=['%s_scaled' % fld for fld in fields])
-print(X.columns) #scaled columns
 
 # We will run now K-Nearest Neighbour (KNN) algorithm to create a "prediction model"
 # 
@@ -137,6 +76,7 @@ print(y_pred,X_test)
 from sklearn.metrics import accuracy_score
 
 # how did our model perform?
+y_test = y_test["quality"].to_numpy()
 count_misclassified = (y_test != y_pred).sum()
 print('Misclassified samples: {}'.format(count_misclassified))
 accuracy = accuracy_score(y_test, y_pred)
@@ -156,30 +96,30 @@ print('Accuracy: {:.2f}'.format(accuracy))
 # This is a list of rates that are often computed from a confusion matrix for a binary classifier:
 # 
 # **Accuracy**: Overall, how often is the classifier correct? 
-#     <br>&emsp;accuracy = (TP+TN)/total
+#     accuracy = (TP+TN)/total
 # 
 # **Misclassification Rate**: Overall, how often is it wrong? 
-#     <br>&emsp;misrate = (FP+FN)/total
-#     <br>&emsp;equivalent to 1 minus Accuracy
-#     <br>&emsp;also known as "Error Rate"
+#     misrate = (FP+FN)/total
+#     equivalent to 1 minus Accuracy
+#     also known as "Error Rate"
 # 
 # **True Positive Rate**: When it's actually yes, how often does it predict yes? 
-#     <br>&emsp;tprate = TP/actual_yes
-#     <br>&emsp;also known as "Sensitivity" or "Recall"
+#     tprate = TP/actual_yes
+#     also known as "Sensitivity" or "Recall"
 # 
 # **False Positive Rate**: When it's actually no, how often does it predict yes?
-#     <br>&emsp;fprate = FP/actual_no
+#     fprate = FP/actual_no
 # 
 # **True Negative Rate**: When it's actually no, how often does it predict no? 
-#     <br>&emsp;tnrate = TN/actual_no
-#     <br>&emsp;equivalent to 1 minus False Positive Rate
-#     <br>&emsp;also known as "Specificity"
+#     tnrate = TN/actual_no
+#     equivalent to 1 minus False Positive Rate
+#     also known as "Specificity"
 # 
 # **Precision**: When it predicts yes, how often is it correct? 
-#     <br>&emsp;precision = TP/predicted_yes
+#     precision = TP/predicted_yes
 # 
 # **Prevalence**: How often does the yes condition actually occur in our sample? 
-#     <br>&emsp;prevalence = actual_yes/total
+#     prevalence = actual_yes/total
 #     
 # ![Confusion Matrix - Theoretical Foundation](https://raw.githubusercontent.com/antongeorgescu/machine-learning-documentation/master/images/Confusion-Matrix-2.PNG) 
 
@@ -198,7 +138,7 @@ cm = confusion_matrix(y_test, y_pred)
 print(cm)
 cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
-sns.heatmap(cm, annot=True, fmt='.2g');
+sns.heatmap(cm, annot=True, fmt='.2g')
 plt.title('Confusion matrix of the KNN classifier')    
 plt.tight_layout()
 
@@ -208,6 +148,6 @@ import sys, os
 summaryfile = 'ModelsFitness.txt'
 nbdir = os.getcwd()
 fsummary = open(f'{nbdir}\\{summaryfile}',"a") 
-fsummary.write('Wine Quality Analysis with k-Nearest Neighbour\tProcessing (sec):{:.4f}\tAccuracy: {:.4f}\tF1-Score: {:.4f}\r\n'.format(proctime,accuracy,f1score))
+fsummary.write('Wine Quality Analysis with KNN and Recovery with {:}, Processing (sec):{:.4f}, Accuracy: {:.4f}, F1-Score: {:.4f}\r\n'.format(IMPUTE_TYPE,proctime,accuracy,f1score))
 fsummary.close() 
 

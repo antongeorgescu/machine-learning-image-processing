@@ -1,2 +1,5 @@
 Wine Quality Analysis with KNN and Original Pre-normalized, Processing (sec):0.6289, Accuracy: 0.5533, F1-Score: 0.5533
 
+Wine Quality Analysis with KNN and Recovery with Simple Impute (mean), Processing (sec):0.2969, Accuracy: 0.5477, F1-Score: 0.5477
+
+Wine Quality Analysis with KNN and Recovery with Simple Impute (most frequent), Processing (sec):0.3372, Accuracy: 0.5477, F1-Score: 0.5477
