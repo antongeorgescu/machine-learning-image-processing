@@ -136,6 +136,6 @@ import sys, os
 summaryfile = 'ModelsFitness.txt'
 nbdir = os.getcwd()
 fsummary = open(f'{nbdir}\\{summaryfile}',"a") 
-fsummary.write('Wine Quality Analysis with KNN and Original Pre-normalized\tProcessing (sec):{:.4f}\tAccuracy: {:.4f}\tF1-Score: {:.4f}\r\n'.format(proctime,accuracy,f1score))
+fsummary.write('Wine Quality Analysis with KNN and Original Pre-normalized, Processing (sec):{:.4f}, Accuracy: {:.4f}, F1-Score: {:.4f}\r\n'.format(proctime,accuracy,f1score))
 fsummary.close() 
 
