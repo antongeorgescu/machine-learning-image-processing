@@ -4,3 +4,4 @@ Wine Quality Analysis with k-Nearest Neighbour	Processing (sec):0.0952	Accuracy:
 Wine Quality Analysis with k-Nearest Neighbour	Processing (sec):0.0903	Accuracy: 0.5650	F1-Score: 0.5650
 Wine Quality Analysis with k-Nearest Neighbour	Processing (sec):0.0918	Accuracy: 0.5650	F1-Score: 0.5650
 Wine Quality Analysis with k-Nearest Neighbour	Processing (sec):0.0924	Accuracy: 0.5650	F1-Score: 0.5650
+Wine Quality Analysis with k-Nearest Neighbour	Processing (sec):0.4737	Accuracy: 0.5533	F1-Score: 0.5533

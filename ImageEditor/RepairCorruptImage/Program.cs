@@ -6,10 +6,9 @@ namespace RepairCorruptImage
 {
     class Program
     {
+        const string RESULTS_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\ImageEditor\GenerateCorruptImage\Results";
         static void Main(string[] args)
         {
-            const string RESULTS_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\ImageEditor\GenerateCorruptImage\Results";
-
             var workingImg = new Bitmap($"{RESULTS_PATH}\\wine_dataset_img_corrupt.png", true);
             int x, y;
             int countOutliers=0;            
