@@ -11,6 +11,7 @@ namespace ConsoleApp1
     {
         const string RESULTS_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\ImageEditor\GenerateCorruptImage\Results";
         const string CONVERTED_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\converted";
+        const int MISSING_POINTS_COUNT = 750;
 
         static void Main(string[] args)
         {
@@ -75,7 +76,7 @@ namespace ConsoleApp1
             grayScale.Save($"{RESULTS_PATH}\\wine_dataset_img_original.png", ImageFormat.Png);
 
             //=== Insert random outliers in Wine dataset image ==================================
-            for (int i = 0; i < 300; i++)
+            for (int i = 0; i < MISSING_POINTS_COUNT; i++)
                 PickRandom(xwineds);
             grayScale = new Bitmap(xwineds[0].Length, xwineds.Length);
             for (Int32 x = 0; x < grayScale.Height; x++)
@@ -98,7 +99,7 @@ namespace ConsoleApp1
                 swineds.Add(xwineds2[k++].ToList().Select(x => x.ToString()).ToArray());
             }
 
-            for (int i = 299; i >= 0; i--)
+            for (int i = MISSING_POINTS_COUNT-1; i >= 0; i--)
                 PickRandom(swineds.ToArray());
             
             File.WriteAllLines($"{RESULTS_PATH}\\wine_dataset_mcar.csv", swineds.Select(x => string.Join(",", x)));

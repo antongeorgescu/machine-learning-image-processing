@@ -2,10 +2,11 @@ import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
 
-# IMPUTE_TYPE = "Simple Impute (mean)"
-# IMPUTE_STRATEGY = "mean"
-IMPUTE_TYPE = "Simple Impute (most frequent)"
-IMPUTE_STRATEGY = "most_frequent"
+IMPUTE_TYPE = "Simple Impute (mean)"
+IMPUTE_STRATEGY = "mean"
+# IMPUTE_TYPE = "Simple Impute (most frequent)"
+# IMPUTE_STRATEGY = "most_frequent"
+MISSING_POINTS_COUNT = 750
 
 # read attribute names from file
 dflabels = pd.read_csv("./converted/wine_attribute_names.csv",names=["label"])
@@ -148,6 +149,6 @@ import sys, os
 summaryfile = 'ModelsFitness.txt'
 nbdir = os.getcwd()
 fsummary = open(f'{nbdir}\\{summaryfile}',"a") 
-fsummary.write('Wine Quality Analysis with KNN and Recovery with {:}, Processing (sec):{:.4f}, Accuracy: {:.4f}, F1-Score: {:.4f}\r\n'.format(IMPUTE_TYPE,proctime,accuracy,f1score))
+fsummary.write('Wine Quality Analysis with KNN and {:} missing points recovery with {:}, Processing (sec):{:.4f}, Accuracy: {:.4f}, F1-Score: {:.4f}\r\n'.format(MISSING_POINTS_COUNT,IMPUTE_TYPE,proctime,accuracy,f1score))
 fsummary.close() 
 
