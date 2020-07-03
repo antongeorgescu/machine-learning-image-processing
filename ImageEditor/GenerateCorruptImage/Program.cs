@@ -11,7 +11,7 @@ namespace ConsoleApp1
     {
         const string RESULTS_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\ImageEditor\GenerateCorruptImage\Results";
         const string CONVERTED_PATH = @"C:\Users\ag4488\Documents\Visual Studio 2019\Projects\Machine Learning\Image Processing\converted";
-        const int MISSING_POINTS_COUNT = 750;
+        const int MISSING_POINTS_COUNT = 3000;
 
         static void Main(string[] args)
         {

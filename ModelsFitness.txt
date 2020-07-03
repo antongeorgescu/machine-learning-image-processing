@@ -4,5 +4,29 @@ Wine Quality Analysis with KNN and 300 missing points recovery with Simple Imput
 
 Wine Quality Analysis with KNN and 300 missing points recovery with Simple Impute (most frequent), Processing (sec):0.2902, Accuracy: 0.5477, F1-Score: 0.5477
 
-Wine Quality Analysis with KNN and 300 missing points image repaired externally, Processing (sec):0.5554, Accuracy: 0.5523, F1-Score: 0.5523
-Wine Quality Analysis with KNN and 750 missing points recovery with Simple Impute (mean), Processing (sec):0.6939, Accuracy: 0.5451, F1-Score: 0.5451
+Wine Quality Analysis with KNN and 300 missing points image repaired externally, Processing (sec):0.5554, Accuracy: 0.5523, F1-Score: 0.5523
+
+Wine Quality Analysis with KNN and 750 missing points recovery with Simple Impute (mean), Processing (sec):0.6939, Accuracy: 0.5451, F1-Score: 0.5451
+
+Wine Quality Analysis with KNN and 750 missing points recovery with Simple Impute (most frequent), Processing (sec):0.2733, Accuracy: 0.5441, F1-Score: 0.5441
+
+Wine Quality Analysis with KNN and 750 missing points image repaired externally, Processing (sec):0.2643, Accuracy: 0.5523, F1-Score: 0.5523
+
+Wine Quality Analysis with KNN and 1250 missing points recovery with Simple Impute (mean), Processing (sec):0.2683, Accuracy: 0.5390, F1-Score: 0.5390
+
+Wine Quality Analysis with KNN and 1250 missing points recovery with Simple Impute (most frequent), Processing (sec):0.2803, Accuracy: 0.5421, F1-Score: 0.5421
+
+Wine Quality Analysis with KNN and 1250 missing points image repaired externally, Processing (sec):0.2663, Accuracy: 0.5436, F1-Score: 0.5436
+
+Wine Quality Analysis with KNN and 1750 missing points recovery with Simple Impute (mean), Processing (sec):0.2663, Accuracy: 0.5472, F1-Score: 0.5472
+
+Wine Quality Analysis with KNN and 1750 missing points recovery with Simple Impute (most frequent), Processing (sec):0.2693, Accuracy: 0.5410, F1-Score: 0.5410
+
+Wine Quality Analysis with KNN and 1750 missing points image repaired externally, Processing (sec):0.2673, Accuracy: 0.5333, F1-Score: 0.5333
+
+Wine Quality Analysis with KNN and 2500 missing points recovery with Simple Impute (mean), Processing (sec):0.2712, Accuracy: 0.5364, F1-Score: 0.5364
+Wine Quality Analysis with KNN and 2500 missing points recovery with Simple Impute (most frequent), Processing (sec):0.2712, Accuracy: 0.5492, F1-Score: 0.5492
+Wine Quality Analysis with KNN and 2500 missing points image repaired externally, Processing (sec):0.2693, Accuracy: 0.5344, F1-Score: 0.5344
+Wine Quality Analysis with KNN and 3000 missing points recovery with Simple Impute (mean), Processing (sec):0.2683, Accuracy: 0.5292, F1-Score: 0.5292
+Wine Quality Analysis with KNN and 3000 missing points recovery with Simple Impute (most frequent), Processing (sec):0.2895, Accuracy: 0.5221, F1-Score: 0.5221
+Wine Quality Analysis with KNN and 3000 missing points image repaired externally, Processing (sec):0.2713, Accuracy: 0.5482, F1-Score: 0.5482

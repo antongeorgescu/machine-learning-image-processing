@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
 
-MISSING_POINTS_COUNT = 300
+MISSING_POINTS_COUNT = 3000
 
 # read attribute names from file
 dflabels = pd.read_csv("./converted/wine_attribute_names.csv",names=["label"])

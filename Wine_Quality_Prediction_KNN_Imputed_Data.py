@@ -2,11 +2,11 @@ import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
 
-IMPUTE_TYPE = "Simple Impute (mean)"
-IMPUTE_STRATEGY = "mean"
-# IMPUTE_TYPE = "Simple Impute (most frequent)"
-# IMPUTE_STRATEGY = "most_frequent"
-MISSING_POINTS_COUNT = 750
+# IMPUTE_TYPE = "Simple Impute (mean)"
+# IMPUTE_STRATEGY = "mean"
+IMPUTE_TYPE = "Simple Impute (most frequent)"
+IMPUTE_STRATEGY = "most_frequent"
+MISSING_POINTS_COUNT = 3000
 
 # read attribute names from file
 dflabels = pd.read_csv("./converted/wine_attribute_names.csv",names=["label"])
