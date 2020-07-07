@@ -15,6 +15,8 @@ import numpy as np
 from PIL import Image
 from sklearn.preprocessing import MinMaxScaler
 
+from MNIST_Digit_Image_28x28_Predictor_with_KNN import *
+
 MNIST_TEST_PATH = "./datasets/mnist28x28_test.csv"
 MNIST_TEST_PATH_NAN = "./datasets/mnist28x28_test_nan.csv"
 MNIST_TEST_PATH_FIXED = "./datasets/mnist28x28_test_fixed.csv"
@@ -29,6 +31,8 @@ mnist_test_columns = mnist_test_df.columns
 COUNT_TEST_ROWS = mnist_test_df.values[:,1].size
 
 # run the "digit image predictor" with KNN on selected original digit images (test)
+set_test_file_path("./datasets/mnist28x28_test.csv")
+run_prediction()
 
 # apply MAR (missing-at-random) values in the test data
 mnist_test_mar_df = mnist_test_df.copy()
@@ -85,7 +89,7 @@ fixed_values = imp_mean.transform(mnist_test_mar_df.values)
 mnist_test_mar_df = pd.DataFrame(data=fixed_values,columns=mnist_test_columns)
 
 # save in "test_fixed" .csv file for persistance
-mnist_test_mar_df.to_csv(MNIST_TEST_PATH_FIXED)
+mnist_test_mar_df.to_csv(MNIST_TEST_PATH_FIXED,index=False)
 
 # save the selected 10 digit "fixed" images in .png files
 for i in list_doped_images_selected:
@@ -109,4 +113,7 @@ for i in list_doped_images_selected:
 
 # re-run the digit image predictor with KNN on "fixed" images - observe the accuracy degradation
 # (optional) repeat the tests for various "missed values doping"
+# run the "digit image predictor" with KNN on selected original digit images (test)
+set_test_file_path("./datasets/mnist28x28_test_fixed.csv")
+run_prediction()
 

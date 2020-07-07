@@ -25,67 +25,71 @@ else:
 import pandas as pd
 import numpy as np
 
-MNIST_TRAINING_PATH = "./datasets/mnist28x28_train_4.csv"
-MNIST_TEST_PATH = "./datasets/mnist28x28_test.csv"
+MNIST_TRAINING_PATH = "./datasets/mnist28x28_train.csv"
+MNIST_TEST_PATH = "" # = "./datasets/mnist28x28_test.csv"
 
-m = np.matrix(np.random.random((5, 5)))
-print(m)
-print(m[1:,[1,]])
+def set_test_file_path(filepath):
+	# m = np.matrix(np.random.random((5, 5)))
+	# print(m)
+	# print(m[1:,[1,]])
+	global MNIST_TEST_PATH
+	MNIST_TEST_PATH = filepath
 
-# read training data from external .csv file
-mnist_training_data = pd.read_csv(MNIST_TRAINING_PATH,sep=',')
+def run_prediction():
+	# read training data from external .csv file
+	mnist_training_data = pd.read_csv(MNIST_TRAINING_PATH,sep=',')
 
-mnist_training_df = pd.DataFrame(mnist_training_data)
-trainLabels = mnist_training_df['label'].tolist()
-trainData = mnist_training_df.drop('label',axis=1).values.tolist()
+	mnist_training_df = pd.DataFrame(mnist_training_data)
+	trainLabels = mnist_training_df['label'].tolist()
+	trainData = mnist_training_df.drop('label',axis=1).values.tolist()
 
-# read test data from external .csv file
-mnist_test_df = pd.read_csv(MNIST_TEST_PATH,sep=',')
-testLabels = mnist_test_df['label'].tolist()
-testData = mnist_test_df.drop('label',axis=1).values.tolist()
+	# read test data from external .csv file
+	mnist_test_df = pd.read_csv(MNIST_TEST_PATH,sep=',')
+	testLabels = mnist_test_df['label'].tolist()
+	testData = mnist_test_df.drop('label',axis=1).values.tolist()
 
-# now, let's take 10% of the training data and use that for validation
-(trainData, valData, trainLabels, valLabels) = train_test_split(trainData, trainLabels,
-	test_size=0.1, random_state=84)
- 
-# import matplotlib.pyplot as plt 
-# plt.gray() 
-# plt.matshow(digits.images[0]) 
-# plt.show() 
- 
-# show the sizes of each data split
-print("training data points: {}".format(len(trainLabels)))
-print("validation data points: {}".format(len(valLabels)))
-print("testing data points: {}".format(len(testLabels)))
+	# now, let's take 10% of the training data and use that for validation
+	(trainData, valData, trainLabels, valLabels) = train_test_split(trainData, trainLabels,
+		test_size=0.1, random_state=84)
+	
+	# import matplotlib.pyplot as plt 
+	# plt.gray() 
+	# plt.matshow(digits.images[0]) 
+	# plt.show() 
+	
+	# show the sizes of each data split
+	print("training data points: {}".format(len(trainLabels)))
+	print("validation data points: {}".format(len(valLabels)))
+	print("testing data points: {}".format(len(testLabels)))
 
-# initialize the values of k for our k-Nearest Neighbor classifier along with the
-# list of accuracies for each value of k
-kVals = range(1, 30, 2)
-accuracies = []
- 
-# loop over various values of `k` for the k-Nearest Neighbor classifier
-for k in range(1, 30, 2):
-	# train the k-Nearest Neighbor classifier with the current value of `k`
-	model = KNeighborsClassifier(n_neighbors=k)
+	# initialize the values of k for our k-Nearest Neighbor classifier along with the
+	# list of accuracies for each value of k
+	kVals = range(1, 30, 2)
+	accuracies = []
+	
+	# loop over various values of `k` for the k-Nearest Neighbor classifier
+	for k in range(1, 30, 2):
+		# train the k-Nearest Neighbor classifier with the current value of `k`
+		model = KNeighborsClassifier(n_neighbors=k)
+		model.fit(trainData, trainLabels)
+	
+		# evaluate the model and update the accuracies list
+		score = model.score(valData, valLabels)
+		print("k=%d, accuracy=%.2f%%" % (k, score * 100))
+		accuracies.append(score)
+	
+	# find the value of k that has the largest accuracy
+	i = int(np.argmax(accuracies))
+	print("k=%d achieved highest accuracy of %.2f%% on validation data" % (kVals[i],
+		accuracies[i] * 100))
+
+	# re-train our classifier using the best k value and predict the labels of the
+	# test data
+	model = KNeighborsClassifier(n_neighbors=kVals[i])
 	model.fit(trainData, trainLabels)
- 
-	# evaluate the model and update the accuracies list
-	score = model.score(valData, valLabels)
-	print("k=%d, accuracy=%.2f%%" % (k, score * 100))
-	accuracies.append(score)
- 
-# find the value of k that has the largest accuracy
-i = int(np.argmax(accuracies))
-print("k=%d achieved highest accuracy of %.2f%% on validation data" % (kVals[i],
-	accuracies[i] * 100))
-
-# re-train our classifier using the best k value and predict the labels of the
-# test data
-model = KNeighborsClassifier(n_neighbors=kVals[i])
-model.fit(trainData, trainLabels)
-predictions = model.predict(testData)
- 
-# show a final classification report demonstrating the accuracy of the classifier
-# for each of the digits
-print("EVALUATION ON TESTING DATA")
-print(classification_report(testLabels, predictions))
+	predictions = model.predict(testData)
+	
+	# show a final classification report demonstrating the accuracy of the classifier
+	# for each of the digits
+	print(f"EVALUATION ON TESTING DATA: FILE {MNIST_TEST_PATH}")
+	print(classification_report(testLabels, predictions))
