@@ -10,6 +10,13 @@
 *.userosscache
 *.sln.docstates
 .vs/
+*.jpg
+*.jpeg
+*.png
+*.tiff
+mnist28x28_test_2.csv
+mnist28x28_train_2.csv
+digit*.csv
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
