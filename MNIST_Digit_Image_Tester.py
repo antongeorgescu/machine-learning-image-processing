@@ -17,14 +17,15 @@ from sklearn.preprocessing import MinMaxScaler
 from MNIST_Digit_Image_28x28_Predictor_with_KNN import *
 from datetime import datetime
 import os
+import sys
 
 RUN_FOLDER = str(datetime.now().timestamp()).replace('.','') 
 os.makedirs(f"./datasets/{RUN_FOLDER}")
 os.makedirs(f"./converted/{RUN_FOLDER}")
 
 # =======================================================================
-MAX_MISSED_VALUES_PER_TEST_BATCH = 2000000  # out of 7,840,000 pixels
-MIN_MISSED_VALUES_PER_DIGIT = 200
+MAX_MISSED_VALUES_PER_TEST_BATCH = 3000000  # out of 7,840,000 pixels
+MIN_MISSED_VALUES_PER_DIGIT = 400
 SELECTED_DIGITS = 10
 # =======================================================================
 
@@ -74,6 +75,11 @@ mnist_test_mar_df.to_csv(MNIST_TEST_PATH_NAN)
 flat_list_doped_images = []
 for l in list_doped_images.tolist():
     flat_list_doped_images += l
+if (len(flat_list_doped_images) == 0):
+    print(f"No samples found with #missed values per digit grater than {MIN_MISSED_VALUES_PER_DIGIT}.")
+    fExecutionSummary.write(f"No samples found with #missed values per digit grater than {MIN_MISSED_VALUES_PER_DIGIT}.")   
+    fExecutionSummary.close()
+    sys.exit(f"No samples found with #missed values per digit grater than {MIN_MISSED_VALUES_PER_DIGIT}.")
 list_doped_images_selected = np.random.choice(flat_list_doped_images,SELECTED_DIGITS,replace=False)
 print(list_doped_images_selected)
 fExecutionSummary.write(f"List of selected digits: {list_doped_images_selected}\r\n")
