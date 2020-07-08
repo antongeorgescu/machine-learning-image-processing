@@ -82,7 +82,7 @@ if (len(flat_list_doped_images) == 0):
     sys.exit(f"No samples found with #missed values per digit grater than {MIN_MISSED_VALUES_PER_DIGIT}.")
 list_doped_images_selected = np.random.choice(flat_list_doped_images,SELECTED_DIGITS,replace=False)
 print(list_doped_images_selected)
-fExecutionSummary.write(f"Selected randonly 10 digits with #missing values grater than {MIN_MISSED_VALUES_PER_DIGIT}\r\n"}
+fExecutionSummary.write(f"Selected randonly 10 digits with #missing values grater than {MIN_MISSED_VALUES_PER_DIGIT}\r\n")
 fExecutionSummary.write(f"List of selected digits: {list_doped_images_selected}\r\n")
 
 # save the selected SELECTED_DIGITS digit original images in .png files
