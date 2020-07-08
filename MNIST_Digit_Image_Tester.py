@@ -14,24 +14,40 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 from sklearn.preprocessing import MinMaxScaler
-
 from MNIST_Digit_Image_28x28_Predictor_with_KNN import *
+from datetime import datetime
+import os
+
+RUN_FOLDER = str(datetime.now().timestamp()).replace('.','') 
+os.makedirs(f"./datasets/{RUN_FOLDER}")
+os.makedirs(f"./converted/{RUN_FOLDER}")
+
+# =======================================================================
+MAX_MISSED_VALUES_PER_TEST_BATCH = 2000000  # out of 7,840,000 pixels
+MIN_MISSED_VALUES_PER_DIGIT = 200
+SELECTED_DIGITS = 10
+# =======================================================================
 
 MNIST_TEST_PATH = "./datasets/mnist28x28_test.csv"
-MNIST_TEST_PATH_NAN = "./datasets/mnist28x28_test_nan.csv"
-MNIST_TEST_PATH_FIXED = "./datasets/mnist28x28_test_fixed.csv"
-MAX_MISSED_VALUES_PER_TEST_BATCH = 1000000  # out of 7,840,000,000 pixels
-MIN_MISSED_VALUES_PER_DIGIT = 120
-SELECTED_DIGITS = 10
-# =======================================================================================
+MNIST_TEST_PATH_NAN = f"./datasets/{RUN_FOLDER}/mnist28x28_test_nan_{MAX_MISSED_VALUES_PER_TEST_BATCH}.csv"
+MNIST_TEST_PATH_FIXED = f"./datasets/{RUN_FOLDER}/mnist28x28_test_fixed_{MAX_MISSED_VALUES_PER_TEST_BATCH}.csv"
+EXEC_SUMMARY_PATH = f"SummaryExecution_{RUN_FOLDER}.txt"
+
+fExecutionSummary = open(EXEC_SUMMARY_PATH,"w+")
+fExecutionSummary.write(f"New session running: {RUN_FOLDER}\r\n")
 
 # read test data from external .csv file
 mnist_test_df = pd.read_csv(MNIST_TEST_PATH,sep=',').astype("float")
 mnist_test_columns = mnist_test_df.columns
 COUNT_TEST_ROWS = mnist_test_df.values[:,1].size
 
+fExecutionSummary.write(f"Inserted #missing values (numpy.nan): {MAX_MISSED_VALUES_PER_TEST_BATCH} out of {28*28*COUNT_TEST_ROWS} pixels.\r\n")
+fExecutionSummary.write("Percentage of missing values(%): {:.0%}\r\n".format(MAX_MISSED_VALUES_PER_TEST_BATCH/(28*28*COUNT_TEST_ROWS)))
+
 # run the "digit image predictor" with KNN on selected original digit images (test)
-set_test_file_path("./datasets/mnist28x28_test.csv")
+set_prediction_script_params(testfilepath=MNIST_TEST_PATH,
+                                isknntuned=False,
+                                execsummaryfileobj = fExecutionSummary)
 run_prediction()
 
 # apply MAR (missing-at-random) values in the test data
@@ -60,6 +76,7 @@ for l in list_doped_images.tolist():
     flat_list_doped_images += l
 list_doped_images_selected = np.random.choice(flat_list_doped_images,SELECTED_DIGITS,replace=False)
 print(list_doped_images_selected)
+fExecutionSummary.write(f"List of selected digits: {list_doped_images_selected}\r\n")
 
 # save the selected SELECTED_DIGITS digit original images in .png files
 for i in list_doped_images_selected:
@@ -78,7 +95,7 @@ for i in list_doped_images_selected:
     suffx = np.apply_along_axis(lambda row: row.astype('|S1').tostring().decode('utf-8'),
                     axis=0,
                     arr=suff)
-    FILENM = f'./converted/digit_orig_{digit}_{str(i)}.jpeg' 
+    FILENM = f'./converted/{RUN_FOLDER}/digit_orig_{digit}_{str(i)}.jpeg' 
     im.save(FILENM) 
 
 # fix MAR by applying Python's library PyImpute methods and save the first 10 gigits in .png files 
@@ -108,12 +125,16 @@ for i in list_doped_images_selected:
     suffx = np.apply_along_axis(lambda row: row.astype('|S1').tostring().decode('utf-8'),
                     axis=0,
                     arr=suff)
-    FILENM = f'./converted/digit_fixed_{digit}_{str(i)}.jpeg' 
+    FILENM = f'./converted/{RUN_FOLDER}/digit_fixed_{digit}_{str(i)}_{MAX_MISSED_VALUES_PER_TEST_BATCH}.jpeg' 
     im.save(FILENM) 
 
 # re-run the digit image predictor with KNN on "fixed" images - observe the accuracy degradation
 # (optional) repeat the tests for various "missed values doping"
 # run the "digit image predictor" with KNN on selected original digit images (test)
-set_test_file_path("./datasets/mnist28x28_test_fixed.csv")
+set_prediction_script_params(testfilepath=MNIST_TEST_PATH_FIXED,
+                                isknntuned=False,
+                                execsummaryfileobj = fExecutionSummary)
 run_prediction()
+
+fExecutionSummary.close()
 

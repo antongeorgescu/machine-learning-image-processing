@@ -14,6 +14,7 @@
 *.jpeg
 *.png
 *.tiff
+*SummaryExecution*.txt
 mnist28x28_test_2.csv
 mnist28x28_train_2.csv
 digit*.csv
