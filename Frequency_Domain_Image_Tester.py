@@ -15,6 +15,7 @@ IMAGE_TYPE = "png"
 ORIGINAL_IMAGE = f"converted/{IMAGE_NAME}.{IMAGE_TYPE}"
 GRAYSCALE_IMAGE = f"converted/grayscale_{IMAGE_NAME}.{IMAGE_TYPE}"
 
+# Read original image and save it as grayscale
 #img = Image.open(ORIGINAL_IMAGE).convert('LA')
 img = Image.open(ORIGINAL_IMAGE)
 img.save(GRAYSCALE_IMAGE)
@@ -24,9 +25,11 @@ plt.figure(figsize=(6.4*5, 4.8*5), constrained_layout=False)
 img = cv2.imread(GRAYSCALE_IMAGE, 0)
 plt.subplot(151), plt.imshow(img, "gray"), plt.title("Original Image")
 
+# Generate the image frequency map (spectrum) through a Fourier transformation
 original = np.fft.fft2(img)
 plt.subplot(152), plt.imshow(np.log(1+np.abs(original)), "gray"), plt.title("Spectrum")
 
+# Shift the zero frequency components to the center of the spectrum map
 center = np.fft.fftshift(original)
 plt.subplot(153), plt.imshow(np.log(1+np.abs(center)), "gray"), plt.title("Centered Spectrum")
 
@@ -108,6 +111,11 @@ def gaussianHP(D0,imgShape):
     return base
 
 plt.figure(figsize=(6.4*5, 4.8*5), constrained_layout=False)
+
+# For smoothing the image, a low pass frequency filter is used 
+# For sharpening the image, a high pass frequency filter is used 
+# Following lines of code show actual implementations for smoothing/sharpening the image
+# with Ideal, Butterworth, Gaussian filters, all part of Python's Open CV libraries
 
 img = cv2.imread(GRAYSCALE_IMAGE, 0)
 plt.subplot(161), plt.imshow(img, "gray"), plt.title("Original Image")
