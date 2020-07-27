@@ -44,3 +44,4 @@ This script shows actual usage of 3 types of filters (Butterworth, Gaussian, and
 * Sample #2: Digit 0-9 recognition with classification model (KNN)
 Run script **MNIST_Digit_Image_Tester.py**
 This script shows an actual implementation of manually written digits between 0-9 recognition by using a trained classification algorithm built with nearest neighbour (KNN) 
+* Supporting documentation can be found at [Image Processing for and with Machine Learning](https://github.com/antongeorgescu/machine-learning-documentation/blob/master/Image%20Processing%20with%20Machine%20Learning%20-%20Presentation.pptx) presentation
