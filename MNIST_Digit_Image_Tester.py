@@ -133,6 +133,7 @@ for i in list_doped_images_selected:
                     axis=0,
                     arr=suff)
     FILENM = f'./converted/{RUN_FOLDER}/digit_fixed_{digit}_{str(i)}_{MAX_MISSED_VALUES_PER_TEST_BATCH}.jpeg' 
+    #predictdigit = kNNModel.predict(FILENM)
     im.save(FILENM) 
 
 # re-run the digit image predictor with KNN on "fixed" images - observe the accuracy degradation
@@ -144,4 +145,6 @@ set_prediction_script_params(testfilepath=MNIST_TEST_PATH_FIXED,
 run_prediction()
 
 fExecutionSummary.close()
+
+
 

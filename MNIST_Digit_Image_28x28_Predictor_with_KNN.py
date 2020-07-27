@@ -31,6 +31,8 @@ TUNE_KNN_HYPERPARAMS = False
 
 fExecutionSummary = None
 
+kNNModel = None
+
 def set_prediction_script_params(testfilepath,isknntuned,execsummaryfileobj):
 	global TUNE_KNN_HYPERPARAMS
 	global MNIST_TEST_PATH
@@ -41,6 +43,8 @@ def set_prediction_script_params(testfilepath,isknntuned,execsummaryfileobj):
 	fExecutionSummary = execsummaryfileobj
 
 def run_prediction():
+	global kNNModel
+
 	# read training data from external .csv file
 	mnist_training_data = pd.read_csv(MNIST_TRAINING_PATH,sep=',')
 
@@ -80,11 +84,11 @@ def run_prediction():
 		# loop over various values of `k` for the k-Nearest Neighbor classifier
 		for k in range(1, 30, 2):
 			# train the k-Nearest Neighbor classifier with the current value of `k`
-			model = KNeighborsClassifier(n_neighbors=k)
-			model.fit(trainData, trainLabels)
+			kNNModel = KNeighborsClassifier(n_neighbors=k)
+			kNNModel.fit(trainData, trainLabels)
 		
 			# evaluate the model and update the accuracies list
-			score = model.score(valData, valLabels)
+			score = kNNModel.score(valData, valLabels)
 			print("k=%d, accuracy=%.2f%%" % (k, score * 100))
 			fExecutionSummary.write("k=%d, accuracy=%.2f%%\r\n" % (k, score * 100))
 			accuracies.append(score)
@@ -98,21 +102,21 @@ def run_prediction():
 			
 		# re-train our classifier using the best k value and predict the labels of the
 		# test data
-		model = KNeighborsClassifier(n_neighbors=kVals[i])
-		model.fit(trainData, trainLabels)
-		predictions = model.predict(testData)
+		kNNModel = KNeighborsClassifier(n_neighbors=kVals[i])
+		kNNModel.fit(trainData, trainLabels)
+		predictions = kNNModel.predict(testData)
 	else:
 		nno = 1
-		model = KNeighborsClassifier(n_neighbors=nno)
-		model.fit(trainData, trainLabels)
+		kNNModel = KNeighborsClassifier(n_neighbors=nno)
+		kNNModel.fit(trainData, trainLabels)
 	
 		# evaluate the model and update the accuracies list
-		score = model.score(valData, valLabels)
+		score = kNNModel.score(valData, valLabels)
 		print("k=%d, accuracy=%.2f%%" % (nno, score * 100))
 		fExecutionSummary.write("k=%d, accuracy=%.2f%%\r\n" % (nno, score * 100))
-		model = KNeighborsClassifier(n_neighbors=nno)
-		model.fit(trainData, trainLabels)
-		predictions = model.predict(testData)
+		kNNModel = KNeighborsClassifier(n_neighbors=nno)
+		kNNModel.fit(trainData, trainLabels)
+		predictions = kNNModel.predict(testData)
 	
 	# show a final classification report demonstrating the accuracy of the classifier
 	# for each of the digits
